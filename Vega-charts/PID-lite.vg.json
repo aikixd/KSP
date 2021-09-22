@@ -1,0 +1,51 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    
+    "width": 1400,
+    "height": 800,
+
+    "autosize": { "type": "pad" },
+
+    "data": {"url": "../pid_log.csv"},
+    "transform": [
+        { "filter" : "datum.time > 94.8" },
+        { "filter" : "datum.time < 102" },
+        
+        { "calculate": "clamp(datum.yawP1, -23.5, 23.5)", "as": "yawP1"},
+        { "calculate": "clamp(datum.yawI1, -23.5, 23.5)", "as": "yawI1"},
+        { "calculate": "clamp(datum.yawD1, -23.5, 23.5)", "as": "yawD1"},
+        { "calculate": "clamp(datum.rollErr2, -1.5, 1.5)", "as": "rollErr2"},
+        { "calculate": "clamp(datum.yawErrAbs, -23.5, 23.5)", "as": "yawErrAbs"}
+        
+
+    ],
+    "repeat": {
+        "layer": [
+            "rollErr2",
+            "rollP2", 
+            
+            "rollD2",
+            "rollO2"
+            ]
+    },
+    "spec": {
+        "mark": "line",
+        "encoding": {
+            "x": {
+                "field": "time", 
+                "type": "quantitative"
+                },
+            "y": {
+                "field": {"repeat": "layer" }, 
+                "type": "quantitative",
+                "scale": { "domain": [-1, 1] }
+                }
+            ,
+            "color": {
+                "datum": { "repeat": "layer" },
+                "type": "nominal"
+            }
+        }
+    }
+  }
+  

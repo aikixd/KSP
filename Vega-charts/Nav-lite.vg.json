@@ -1,0 +1,39 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    
+    "width": 1400,
+    "height": 800,
+
+    "autosize": { "type": "pad" },
+
+    "data": {"url": "../pid_log.csv"},
+    "transform": [
+        { "filter" : "datum.time > 0" },
+        { "filter" : "datum.time < 400" }
+        
+
+    ],
+    "repeat": {
+        "layer": ["errAbsPitch", "avPitch" ]
+    },
+    "spec": {
+        "mark": "line",
+        "encoding": {
+            "x": {
+                "field": "time", 
+                "type": "quantitative"
+                },
+            "y": {
+                "field": {"repeat": "layer" }, 
+                "type": "quantitative"
+                
+                }
+            ,
+            "color": {
+                "datum": { "repeat": "layer" },
+                "type": "nominal"
+            }
+        }
+    }
+  }
+  
