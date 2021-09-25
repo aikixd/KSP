@@ -17,6 +17,42 @@ wait 0. // Keep deltas above zero.
 
 //***** Update functions *****//
 
+function lerpVec
+{
+    parameter _vecFrom, _vecTo, factor.
+
+    return (_vecTo - _vecFrom) * factor.
+}
+
+function getPitch
+{
+    local _normal to vCrs(ship:up:vector, ship:facing:vector).
+    local _heading to vCrs(_normal, ship:up:vector):normalized.
+
+    return arcCos(vDot(ship:facing:vector, _heading)).
+}
+
+function lerpScalar
+{
+    parameter _from, _to, _factor.
+
+    return (_to - _from) * _factor.
+}
+
+function lerpScalarOverTime
+{
+    parameter 
+        _fromTime, _overTime,
+        _fromValue, _toValue.
+    
+    local _factor to (time:seconds - _fromTime) / _overTime.
+
+    if (_factor > 1.0) set _factor to 1.0.
+
+    local _deltaValue to _toValue - _fromValue.
+
+    return _fromValue + (_deltaValue * _factor).
+}
 
 function calcRollError
 {
@@ -52,30 +88,6 @@ function calcTgtVec
         pitch, 
         choose calcRollError() if targets:haskey("roll") else 0).
 }
-
-function calcPitchInertialVec
-{
-    parameter _tgtPitch.
-    parameter _tgtRoll.
-
-    local _velNormal to vCrs(ship:velocity:surface, ship:up:vector).
-    local _heading to vCrs(ship:up:vector, _velNormal).
-
-    local _fore to (angleAxis(_tgtPitch, _velNormal) * _heading).
-    local _rot to angleAxis(-_tgtRoll, _fore).
-
-    return _rot * _fore:direction.
-}
-
-function get_draw_local
-{
-    parameter v, c.
-    return vecDraw(v(0,0,0), v, c, "", 25.0, true, 0.01).
-}
-
-
-// global dbgDraw1 to get_draw_local(v(0,0,0), rgb(1,0,0)).
-// global dbgDraw2 to get_draw_local(v(0,0,0), rgb(1,0,1)).
 
 
 function calcPitchFrom

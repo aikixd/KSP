@@ -8,10 +8,16 @@ if (core:tag = "standard")
     copyPath("0:/pony-s", "launch").
 }
 
-ELSE if (core:tag = "SB")
+else if (core:tag = "SB")
 {
     print "Using config: pony-sb".
     compile "0:/pony-sb" to "launch".
+}
+
+else if (core:tag = "SB-U")
+{
+    print "Using config: pony-sb-u".
+    compile "0:/pony-sb-u" to "launch".
 }
 
 else
